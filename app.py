@@ -1,7 +1,17 @@
 from requests import Request, Session, Response
 import os
 
-def weather(lat, long, apiKey):
+import flask
+
+app = flask.Flask(__name__)
+app.config["DEBUG"] = True
+
+
+@app.route('/', methods=['GET'])
+def home():
+    lat = request.args["lat"]
+    long = request.args["lon"]
+    apiKey = os.environ['API_KEY']
     try:
         url = 'http://api.openweathermap.org/data/2.5/weather'
         params = {
@@ -18,9 +28,4 @@ def weather(lat, long, apiKey):
     except Exception as e:
         return e
 
-
-lat = os.environ['LAT']
-long = os.environ['LONG']
-apiKey = os.environ['API_KEY']
-
-print(weather(lat,long,apiKey))
+app.run(port=8081)
